@@ -10,7 +10,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link " href="#">
+            <a class="nav-link " href="{{ route('post.all') }}">
                 <i class="bi bi-grid"></i>
                 <span>Posts</span>
             </a>

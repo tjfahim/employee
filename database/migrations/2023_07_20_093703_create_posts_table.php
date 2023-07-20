@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->string('CompanyName');
-            $table->text('Description');
-            $table->string('Image');
-            $table->decimal('Latitude', 10, 7);
-            $table->decimal('Longitude', 10, 7); 
+            $table->string('company_name');
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7); 
             $table->char('status', 1)->default('0');
             $table->timestamps();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

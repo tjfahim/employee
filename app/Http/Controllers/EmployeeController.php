@@ -59,17 +59,8 @@ class EmployeeController extends Controller
         return response()->json(['status' => 'success']);
     }
     
-    public function show($id)
-    {
-        $employee = Employee::findOrFail($id);
-        return view('employees.show', compact('employee'));
-    }
+  
 
-    public function edit($id)
-    {
-        $employee = Employee::findOrFail($id);
-        return view('employees.edit', compact('employee'));
-    }
 
     public function update(Request $request)
     {

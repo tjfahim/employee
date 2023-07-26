@@ -18,8 +18,8 @@ class Post extends Model
         'Longitude',
     ];
 
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(User::class, 'employee_id');
     }
 }

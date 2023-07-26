@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::where('status', 'active')->latest()->paginate(5);
+        $employees = User::where('status', 'active')->where('role','employee')->latest()->paginate(5);
         return view('backend.dashboard', compact('employees'));
     }
 
@@ -20,12 +21,13 @@ class EmployeeController extends Controller
         // Manual validation of form data
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:employees',
-            'phone' => 'required|unique:employees',
-            'password' => 'required|min:8',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|unique:users',
+            'password' => 'required|min:4',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'employee_id' => 'nullable|unique:employees',
+            'employee_id' => 'nullable|unique:users',
             'status' => 'in:active,inactive',
+            'designation' => 'nullable',
         ]);
     
         if ($validator->fails()) {
@@ -43,7 +45,7 @@ class EmployeeController extends Controller
         }
     
         // Create a new Employee instance and fill with form data
-        $employee = new Employee();
+        $employee = new User();
         $employee->name = $request->input('name');
         $employee->email = $request->input('email');
         $employee->phone = $request->input('phone');
@@ -51,6 +53,8 @@ class EmployeeController extends Controller
         $employee->image = $imagePath;
         $employee->employee_id = $request->input('employee_id');
         $employee->status = $request->input('status', 'active');
+        $employee->designation = $request->input('designation');
+        $employee->role = 'employee';
     
         // Save the employee data to the database
         $employee->save();
@@ -71,14 +75,16 @@ class EmployeeController extends Controller
             'u_password' => 'required',
             'u_employee_id' => 'nullable|unique:employees,employee_id,' . $request->u_id,
             'u_status' => 'in:active,inactive',
+            'u_designation' => 'nullable',
         ]);
 
-      Employee::where('id', $request->u_id)->update([
+      User::where('id', $request->u_id)->update([
       'name' => $request->u_name,
       'email' => $request->u_email,
       'phone' => $request->u_phone,
       'password' => $request->u_password,
       'employee_id' => $request->u_employee_id,
+      'designation' => $request->u_designation,
       ]);
       
         return response()->json(['status' => 'update']);
@@ -87,7 +93,7 @@ class EmployeeController extends Controller
     public function destroy(Request $request)
     {
 
-      Employee::where('id', $request->id)->update([
+      User::where('id', $request->id)->update([
       'status' => 'inactive',
       ]);
       

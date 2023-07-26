@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7); 
             $table->char('status', 1)->default('0');
             $table->timestamps();
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }

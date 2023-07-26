@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $employee= Employee::where('status','active')->get();
+        $employee= User::where('status','active')->where('role','employee')->get();
         $posts = Post::where('status','0')->latest()->paginate(5);
         return view('backend.posts', compact('posts','employee'));
     }
